@@ -103,7 +103,8 @@ public class PartnerController {
     String name = I18n.get("Partner") + " " + partner.getPartnerSeq();
 
     String fileLink =
-        ReportFactory.createReport(IReport.PARTNER, name + "-${date}")
+        ReportFactory.createReport(
+                "partner", getActiveCompany(), IReport.PARTNER, name + "-${date}")
             .addParam("Locale", ReportSettings.getPrintingLocale(partner))
             .addParam("PartnerId", partner.getId())
             .generate()
@@ -130,7 +131,8 @@ public class PartnerController {
     String name = I18n.get("Phone Book");
 
     String fileLink =
-        ReportFactory.createReport(IReport.PHONE_BOOK, name + "-${date}")
+        ReportFactory.createReport(
+                "phoneBook", getActiveCompany(), IReport.PHONE_BOOK, name + "-${date}")
             .addParam("Locale", ReportSettings.getPrintingLocale(null))
             .addParam("UserId", user.getId())
             .generate()
@@ -157,7 +159,11 @@ public class PartnerController {
     String name = I18n.get("Company PhoneBook");
 
     String fileLink =
-        ReportFactory.createReport(IReport.COMPANY_PHONE_BOOK, name + "-${date}")
+        ReportFactory.createReport(
+                "companyPhoneBook",
+                getActiveCompany(),
+                IReport.COMPANY_PHONE_BOOK,
+                name + "-${date}")
             .addParam("Locale", ReportSettings.getPrintingLocale(null))
             .addParam("UserId", user.getId())
             .generate()
@@ -183,7 +189,8 @@ public class PartnerController {
 
     String name = I18n.get("Customer Situation");
     String fileLink =
-        ReportFactory.createReport(IReport.CLIENT_SITUATION, name + "-${date}")
+        ReportFactory.createReport(
+                "clientSituation", getActiveCompany(), IReport.CLIENT_SITUATION, name + "-${date}")
             .addParam("Locale", ReportSettings.getPrintingLocale(partner))
             .addParam("UserId", user.getId())
             .addParam("PartnerId", partner.getId())

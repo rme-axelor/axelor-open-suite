@@ -26,6 +26,7 @@
 	<one-to-many name="bankDetailsList" ref="com.axelor.apps.base.db.BankDetails" title="Bank accounts" mappedBy="company"/>
 
   	<many-to-one name="printingSettings" ref="PrintingSettings" title="Printing Settings" massUpdate="true"/>
+    <one-to-many name="documentTemplates" ref="DocumentTemplateAssignment" title="Document templates" mappedBy="company"/>
   	
   	<integer name="defaultPartnerTypeSelect" title="Partner Type" selection="company.partner.type.select" default="1" massUpdate="true"/>
 

@@ -72,4 +72,8 @@
 	<selection name="abc.analysis.type.select" id="sale.abc.analysis.type.select">
 		<option value="com.axelor.apps.sale.service.ABCAnalysisServiceSaleImpl">Sale</option>
 	</selection>
+
+	<selection name="base.document.template.type.select" id="sale.document.template.type.select">
+		<option value="saleSaleOrder">Sale order</option>
+	</selection>
 </object-views>

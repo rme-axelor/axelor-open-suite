@@ -182,6 +182,10 @@
         	<panel name="emailSignaturePanel" colSpan="12" title="Email signature">
         		<field name="emailSignature" widget="Html" x-lite="true" height="9" colSpan="12"/>
         	</panel>
+		    <panel-related name="emailAccountListPanel" field="emailAccountList" if="__config__.app.getApp('base').getEmailAccountByUser()" colSpan="12" form-view="mail-account-form" grid-view="mail-account-grid"/>
+			<panel name="printPanel" title="Printing">
+                <field name="documentTemplates" grid-view="document-template-assignment-grid" form-view="document-template-assignment-user-form" canSelect="true" canNew="true" canEdit="true" colSpan="12"/>
+            </panel>
         </panel-tabs>
 
         <panel name="transientPasswordPanel" hidden="true" colSpan="12">
