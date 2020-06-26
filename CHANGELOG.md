@@ -1,6 +1,8 @@
 # Changelog
 ## [Unreleased 5.3.8]
 ## Improvements
+- Opportunity: Change in field type from string to decimal.
+
 ## Bug Fixes
 - EXTRA HOURS : Fix missing translation
 - ACCOUNTING REPORT : Add missing translations in report
