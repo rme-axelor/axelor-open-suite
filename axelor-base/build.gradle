@@ -28,7 +28,7 @@ dependencies {
         	transitive = false
 	}
 
-	compile("net.sf.jasperreports:jasperreports:6.7.0") {
+	compile("net.sf.jasperreports:jasperreports:6.14.0") {
         // Needed because of conflicts with version referenced through itextpdf & axelor-account
         exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
 

@@ -36,51 +36,63 @@ import java.util.List;
 
 public class ManufOrderPrintServiceImpl implements ManufOrderPrintService {
 
-	@Override
-	public String printManufOrders(List<Long> ids) throws IOException {
-		List<File> printedManufOrders = new ArrayList<>();
-		ModelTool.apply(ManufOrder.class, ids, new ThrowConsumer<ManufOrder>() {
+  @Override
+  public String printManufOrders(List<Long> ids) throws IOException {
+    List<File> printedManufOrders = new ArrayList<>();
+    ModelTool.apply(
+        ManufOrder.class,
+        ids,
+        new ThrowConsumer<ManufOrder>() {
 
-			@Override
-			public void accept(ManufOrder manufOrder) throws Exception {
-				printedManufOrders.add(print(manufOrder));
-			}
-		});
-		String fileName = getManufOrdersFilename();
-		return PdfTool.mergePdfToFileLink(printedManufOrders, fileName);
-	}
+          @Override
+          public void accept(ManufOrder manufOrder) throws Exception {
+            printedManufOrders.add(print(manufOrder));
+          }
+        });
+    String fileName = getManufOrdersFilename();
+    return PdfTool.mergePdfToFileLink(printedManufOrders, fileName);
+  }
 
-	@Override
-	public String printManufOrder(ManufOrder manufOrder) throws AxelorException {
-		String fileName = getFileName(manufOrder);
-		return PdfTool.getFileLinkFromPdfFile(print(manufOrder), fileName);
-	}
+  @Override
+  public String printManufOrder(ManufOrder manufOrder) throws AxelorException {
+    String fileName = getFileName(manufOrder);
+    return PdfTool.getFileLinkFromPdfFile(print(manufOrder), fileName);
+  }
 
-	protected File print(ManufOrder manufOrder) throws AxelorException {
-		ReportSettings reportSettings = prepareReportSettings(manufOrder);
-		return reportSettings.generate().getFile();
-	}
+  protected File print(ManufOrder manufOrder) throws AxelorException {
+    ReportSettings reportSettings = prepareReportSettings(manufOrder);
+    return reportSettings.generate().getFile();
+  }
 
-	public ReportSettings prepareReportSettings(ManufOrder manufOrder) throws AxelorException {
-		String title = getFileName(manufOrder);
-		ReportSettings reportSetting = ReportFactory.createReport("productionManufOrder", manufOrder.getCompany(),
-				IReport.MANUF_ORDER, title);
-		return reportSetting.addParam("Locale", ReportSettings.getPrintingLocale(null))
-				.addParam("ManufOrderId", manufOrder.getId().toString())
-				.addParam("activateBarCodeGeneration",
-						Beans.get(AppBaseService.class).getAppBase().getActivateBarCodeGeneration())
-				.addFormat(ReportSettings.FORMAT_PDF);
-	}
+  public ReportSettings prepareReportSettings(ManufOrder manufOrder) throws AxelorException {
+    String title = getFileName(manufOrder);
+    ReportSettings reportSetting =
+        ReportFactory.createReport(
+            "productionManufOrder", manufOrder.getCompany(), IReport.MANUF_ORDER, title);
+    return reportSetting
+        .addParam("Locale", ReportSettings.getPrintingLocale(null))
+        .addParam("ManufOrderId", manufOrder.getId().toString())
+        .addParam(
+            "activateBarCodeGeneration",
+            Beans.get(AppBaseService.class).getAppBase().getActivateBarCodeGeneration())
+        .addFormat(ReportSettings.FORMAT_PDF);
+  }
 
-	@Override
-	public String getManufOrdersFilename() {
-		return I18n.get("Manufacturing orders") + " - "
-				+ Beans.get(AppBaseService.class).getTodayDate().format(DateTimeFormatter.BASIC_ISO_DATE) + "."
-				+ ReportSettings.FORMAT_PDF;
-	}
+  @Override
+  public String getManufOrdersFilename() {
+    return I18n.get("Manufacturing orders")
+        + " - "
+        + Beans.get(AppBaseService.class).getTodayDate().format(DateTimeFormatter.BASIC_ISO_DATE)
+        + "."
+        + ReportSettings.FORMAT_PDF;
+  }
 
-	@Override
-	public String getFileName(ManufOrder manufOrder) {
-		return I18n.get("Manufacturing order") + " " + manufOrder.getManufOrderSeq() + "." + ReportSettings.FORMAT_PDF;
-	}
+  @Override
+  public String getFileName(ManufOrder manufOrder) {
+    return I18n.get("Manufacturing order")
+        + " "
+        + manufOrder.getManufOrderSeq()
+        + "."
+        + ReportSettings.FORMAT_PDF;
+  }
 }
