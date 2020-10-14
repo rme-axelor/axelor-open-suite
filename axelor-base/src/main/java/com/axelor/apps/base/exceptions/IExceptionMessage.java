@@ -443,4 +443,8 @@ public interface IExceptionMessage {
       "Please fill in GeoNames URL in Base application configuration." /*)*/;
   public static final String INVALID_GEONAMES_IMPORT_FILE = /*$$(*/
       "The geonames file type is invalid." /*)*/;
+
+  /*Group Export/Import*/
+  public static final String GROUP_EXPORT_ADVANCE_EXPORT_LINE_LIST_EMPTY = /*$$(*/
+      "No data to export." /*)*/;
 }

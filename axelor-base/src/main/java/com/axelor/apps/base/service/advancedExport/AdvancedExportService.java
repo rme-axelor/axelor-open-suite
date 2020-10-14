@@ -36,7 +36,11 @@ public interface AdvancedExportService {
   public Query getAdvancedExportQuery(AdvancedExport advancedExport, List<Long> recordIds)
       throws AxelorException;
 
-  public File export(AdvancedExport advancedExport, List<Long> recordIds, String fileType)
+  public File export(
+      AdvancedExport advancedExport,
+      List<Long> recordIds,
+      String fileType,
+      boolean isGenerateConfig)
       throws AxelorException;
 
   public Filter getJpaSecurityFilter(MetaModel metaModel);
@@ -46,4 +50,6 @@ public interface AdvancedExportService {
   public String getExportFileName();
 
   public boolean checkAdvancedExportExist(String metaModelName);
+
+  public List<Long> getFilterConditionRecords(AdvancedExport advancedExport) throws AxelorException;
 }

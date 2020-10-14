@@ -83,6 +83,8 @@ public class AdvancedExportServiceImpl implements AdvancedExportService {
   private boolean isReachMaxExportLimit, isNormalField, isSelectionField = false;
   private int msi, mt;
 
+  private boolean isGenerateConfig = false;
+
   /**
    * This method split and join the all fields/columns which are selected by user and create the
    * query.
@@ -267,7 +269,10 @@ public class AdvancedExportServiceImpl implements AdvancedExportService {
       if (parentIndex == 0) {
         selectField = "";
       }
-      if (language.equals(LANGUAGE_FR)) {
+      if (isGenerateConfig) {
+        aliasName = ("msi_" + (msi));
+        selectField += ".value";
+      } else if (language.equals(LANGUAGE_FR)) {
         aliasName =
             "COALESCE ("
                 + "NULLIF"
@@ -427,8 +432,14 @@ public class AdvancedExportServiceImpl implements AdvancedExportService {
    * @throws AxelorException
    */
   @Override
-  public File export(AdvancedExport advancedExport, List<Long> recordIds, String fileType)
+  public File export(
+      AdvancedExport advancedExport,
+      List<Long> recordIds,
+      String fileType,
+      boolean isGenerateConfig)
       throws AxelorException {
+
+    this.isGenerateConfig = isGenerateConfig;
 
     AdvancedExportGenerator exportGenerator =
         exportGeneratorFactory.getAdvancedExportGenerator(advancedExport, fileType);
@@ -437,7 +448,7 @@ public class AdvancedExportServiceImpl implements AdvancedExportService {
 
     Query query = getAdvancedExportQuery(advancedExport, recordIds);
 
-    File file = exportGenerator.generateFile(query);
+    File file = exportGenerator.generateFile(query, isGenerateConfig);
     isReachMaxExportLimit = exportGenerator.getIsReachMaxExportLimit();
     exportFileName = exportGenerator.getExportFileName();
     return file;
@@ -459,7 +470,7 @@ public class AdvancedExportServiceImpl implements AdvancedExportService {
    * <p>For example:
    *
    * <pre>
-   * 	Query<Contact> q = Contact.all().filter("self.title.code = ?1 OR self.age > ?2", "mr", 20);
+   * Query<Contact> q = Contact.all().filter("self.title.code = ?1 OR self.age > ?2", "mr", 20);
    * </pre>
    *
    * Results in:
@@ -626,5 +637,28 @@ public class AdvancedExportServiceImpl implements AdvancedExportService {
     }
 
     return true;
+  }
+
+  @Override
+  public List<Long> getFilterConditionRecords(AdvancedExport advancedExport)
+      throws AxelorException {
+
+    List<Long> ids = null;
+    if (!StringUtils.isBlank(advancedExport.getFilterCondition())) {
+      try {
+        StringBuilder recordsListQuery = new StringBuilder();
+        recordsListQuery.append(
+            "SELECT id FROM " + advancedExport.getMetaModel().getName() + " self WHERE (");
+        recordsListQuery.append(advancedExport.getFilterCondition());
+        recordsListQuery.append(")");
+
+        Query query = JPA.em().createQuery(recordsListQuery.toString(), Long.class);
+        ids = query.getResultList();
+
+      } catch (Exception e) {
+        throw new AxelorException(TraceBackRepository.CATEGORY_CONFIGURATION_ERROR, e.getMessage());
+      }
+    }
+    return ids;
   }
 }
