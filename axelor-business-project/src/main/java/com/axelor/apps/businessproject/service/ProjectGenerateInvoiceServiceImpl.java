@@ -76,6 +76,7 @@ public class ProjectGenerateInvoiceServiceImpl implements ProjectGenerateInvoice
 
   protected ExpenseInvoiceLineService expenseInvoiceLineService;
 
+  protected InvoicingProjectInvoiceService invoicingProjectInvoiceService;
   protected InvoicingProjectStockMovesService invoicingProjectStockMovesService;
   protected InvoiceLineService invoiceLineService;
   protected ProjectTaskBusinessProjectService projectTaskBusinessProjectService;
@@ -88,6 +89,7 @@ public class ProjectGenerateInvoiceServiceImpl implements ProjectGenerateInvoice
 
   @Inject
   public ProjectGenerateInvoiceServiceImpl(
+      InvoicingProjectInvoiceService invoicingProjectInvoiceService,
       InvoicingProjectService invoicingProjectService,
       PartnerService partnerService,
       InvoicingProjectRepository invoicingProjectRepo,
@@ -104,6 +106,7 @@ public class ProjectGenerateInvoiceServiceImpl implements ProjectGenerateInvoice
       InvoiceLineAnalyticService invoiceLineAnalyticService,
       AnalyticLineService analyticLineService,
       PartnerAccountService partnerAccountService) {
+    this.invoicingProjectInvoiceService = invoicingProjectInvoiceService;
     this.invoicingProjectService = invoicingProjectService;
     this.partnerService = partnerService;
     this.invoicingProjectRepo = invoicingProjectRepo;
@@ -226,7 +229,8 @@ public class ProjectGenerateInvoiceServiceImpl implements ProjectGenerateInvoice
         && invoicingProject.getLogTimesSet().isEmpty()
         && invoicingProject.getExpenseLineSet().isEmpty()
         && invoicingProject.getProjectTaskSet().isEmpty()
-        && invoicingProject.getStockMoveLineSet().isEmpty()) {
+        && invoicingProject.getStockMoveLineSet().isEmpty()
+        && invoicingProject.getInvoiceLineSet().isEmpty()) {
       throw new AxelorException(
           invoicingProject,
           TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
@@ -252,8 +256,11 @@ public class ProjectGenerateInvoiceServiceImpl implements ProjectGenerateInvoice
 
     List<InvoiceLine> invoiceLineList = new ArrayList<>();
     invoiceLineList.addAll(
+        invoicingProjectInvoiceService.createCusInvFromSupInvLines(
+            invoice, folder.getInvoiceLineSet(), folder.getInvoiceLineSetPrioritySelect()));
+    invoiceLineList.addAll(
         invoicingProjectStockMovesService.createStockMovesInvoiceLines(
-            invoice, folder.getStockMoveLineSet()));
+            invoice, folder.getStockMoveLineSet(), folder.getStockMoveLineSetPrioritySelect()));
     invoiceLineList.addAll(
         this.createSaleOrderInvoiceLines(
             invoice, saleOrderLineList, folder.getSaleOrderLineSetPrioritySelect()));
@@ -314,6 +321,7 @@ public class ProjectGenerateInvoiceServiceImpl implements ProjectGenerateInvoice
             priority,
             false,
             saleOrderLine,
+            null,
             null,
             null) {
 
