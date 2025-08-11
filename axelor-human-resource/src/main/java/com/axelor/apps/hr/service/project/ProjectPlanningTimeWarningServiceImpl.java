@@ -141,7 +141,7 @@ public class ProjectPlanningTimeWarningServiceImpl implements ProjectPlanningTim
 
     projectPlanningTimeSet =
         projectPlanningTimeSet.stream()
-            .filter(ppt -> ppt.getDisplayPlannedTime().compareTo(oldBudgetedTime) == 0)
+            .filter(ppt -> ppt.getPlannedTime().compareTo(oldBudgetedTime) == 0)
             .collect(Collectors.toSet());
 
     if (ObjectUtils.isEmpty(projectPlanningTimeSet)) {

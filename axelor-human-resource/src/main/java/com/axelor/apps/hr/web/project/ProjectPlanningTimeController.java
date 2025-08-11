@@ -101,8 +101,12 @@ public class ProjectPlanningTimeController {
     ProjectPlanningTime projectPlanningTime =
         request.getContext().asType(ProjectPlanningTime.class);
 
-    Beans.get(ProjectPlanningTimeComputeService.class)
-        .computePlannedTimeValues(projectPlanningTime);
+    ProjectPlanningTimeComputeService projectPlanningTimeComputeService =
+        Beans.get(ProjectPlanningTimeComputeService.class);
+    projectPlanningTimeComputeService.computePlannedTimeValues(projectPlanningTime);
+    projectPlanningTime.setEndDateTime(
+        projectPlanningTimeComputeService.computeEndDateTime(
+            projectPlanningTime, projectPlanningTime.getProject()));
     response.setValues(projectPlanningTime);
   }
 
@@ -155,9 +159,6 @@ public class ProjectPlanningTimeController {
     ProjectPlanningTimeService projectPlanningTimeService =
         Beans.get(ProjectPlanningTimeService.class);
 
-    response.setValue(
-        "displayPlannedTime",
-        projectPlanningTimeService.getDefaultPlanningTime(projectPlanningTime));
     response.setValue(
         "displayPlannedTimeRestricted",
         projectPlanningTimeService.getDefaultPlanningRestrictedTime(projectPlanningTime));

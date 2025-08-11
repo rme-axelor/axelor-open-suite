@@ -200,7 +200,6 @@ public class ProjectPlanningTimeCreateServiceImpl implements ProjectPlanningTime
     planningTime.setEndDateTime(taskEndDateTime);
     planningTime.setProject(project);
     planningTime.setSite(site);
-    planningTime.setTimeUnit(defaultTimeUnit);
 
     BigDecimal totalHours = BigDecimal.ZERO;
     if (timePercent > 0) {
@@ -212,7 +211,6 @@ public class ProjectPlanningTimeCreateServiceImpl implements ProjectPlanningTime
     } else {
       planningTime.setTimeUnit(projectPlanningTimeToolService.getDefaultTimeUnit(planningTime));
     }
-    planningTime.setDisplayTimeUnit(planningTime.getTimeUnit());
 
     if (planningTime.getTimeUnit() == null) {
       return planningTime;

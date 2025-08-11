@@ -121,10 +121,10 @@ public class ProjectPlanningTimeCreateUpdateServiceImpl
             projectPlanningTime, projectTask.getProject());
     projectPlanningTime.setEndDateTime(taskEndDateTime);
 
-    projectPlanningTime.setDisplayPlannedTime(projectTask.getBudgetedTime());
+    projectPlanningTime.setPlannedTime(projectTask.getBudgetedTime());
     Unit timeUnit = projectPlanningTimeService.getTimeUnit(projectTask);
     if (timeUnit != null) {
-      projectPlanningTime.setDisplayTimeUnit(timeUnit);
+      projectPlanningTime.setTimeUnit(timeUnit);
     }
 
     projectPlanningTimeComputeService.computePlannedTimeValues(projectPlanningTime);
@@ -157,7 +157,7 @@ public class ProjectPlanningTimeCreateUpdateServiceImpl
         && projectTask.getBudgetedTime().compareTo(oldBudgetedTime) != 0) {
       projectPlanningTimeSet =
           projectPlanningTimeSet.stream()
-              .filter(ppt -> ppt.getDisplayPlannedTime().compareTo(oldBudgetedTime) == 0)
+              .filter(ppt -> ppt.getPlannedTime().compareTo(oldBudgetedTime) == 0)
               .collect(Collectors.toSet());
     }
 

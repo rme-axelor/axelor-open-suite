@@ -94,9 +94,8 @@ public class TaskTemplateHrServiceImpl extends TaskTemplateServiceImpl {
               task.getSite(),
               unitHours);
 
-      projectPlanningTime.setDisplayTimeUnit(unitHours);
-      projectPlanningTime.setDisplayPlannedTime(task.getTotalPlannedHrs());
-      projectPlanningTimeComputeService.computePlannedTimeValues(projectPlanningTime);
+      projectPlanningTime.setEndDateTime(
+          projectPlanningTimeComputeService.computeEndDateTime(projectPlanningTime, project));
       projectPlanningTimeRepository.save(projectPlanningTime);
     }
   }

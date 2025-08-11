@@ -98,12 +98,6 @@ public class ProjectTaskPPTGenerateServiceImpl implements ProjectTaskPPTGenerate
             projectPlanningTime, projectTask.getProject());
     projectPlanningTime.setEndDateTime(taskEndDateTime);
 
-    projectPlanningTime.setDisplayPlannedTime(projectTask.getBudgetedTime());
-    Unit timeUnit = projectPlanningTimeService.getTimeUnit(projectTask);
-    if (timeUnit != null) {
-      projectPlanningTime.setDisplayTimeUnit(timeUnit);
-    }
-
     projectPlanningTimeComputeService.computePlannedTimeValues(projectPlanningTime);
     projectTask.addProjectPlanningTimeListItem(projectPlanningTime);
   }
@@ -115,17 +109,15 @@ public class ProjectTaskPPTGenerateServiceImpl implements ProjectTaskPPTGenerate
       return;
     }
     projectPlanningTime.setStartDateTime(projectTask.getTaskDate().atStartOfDay());
-    projectPlanningTime.setDisplayPlannedTime(projectTask.getBudgetedTime());
+    projectPlanningTime.setPlannedTime(projectTask.getBudgetedTime());
     LocalDateTime taskEndDateTime =
         projectPlanningTimeComputeService.computeEndDateTime(
             projectPlanningTime, projectTask.getProject());
     projectPlanningTime.setEndDateTime(taskEndDateTime);
     Unit timeUnit = projectPlanningTimeService.getTimeUnit(projectTask);
     if (timeUnit != null) {
-      projectPlanningTime.setDisplayTimeUnit(timeUnit);
+      projectPlanningTime.setTimeUnit(timeUnit);
     }
-
-    projectPlanningTimeComputeService.computePlannedTimeValues(projectPlanningTime);
   }
 
   @Override

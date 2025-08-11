@@ -287,22 +287,7 @@ public class ProjectPlanningTimeServiceImpl implements ProjectPlanningTimeServic
     if (projectConfig != null && projectConfig.getIsSelectionOnDisplayPlannedTime()) {
       return computePlannedTimeFromDisplayRestricted(projectPlanningTime);
     }
-    return computePlannedTimeFromDisplay(projectPlanningTime);
-  }
-
-  protected BigDecimal computePlannedTimeFromDisplay(ProjectPlanningTime projectPlanningTime)
-      throws AxelorException {
-    if (projectPlanningTime.getDisplayTimeUnit() == null
-        || projectPlanningTime.getTimeUnit() == null
-        || projectPlanningTime.getDisplayPlannedTime() == null) {
-      return BigDecimal.ZERO;
-    }
-    return unitConversionForProjectService.convert(
-        projectPlanningTime.getDisplayTimeUnit(),
-        projectPlanningTime.getTimeUnit(),
-        projectPlanningTime.getDisplayPlannedTime(),
-        projectPlanningTime.getDisplayPlannedTime().scale(),
-        projectPlanningTime.getProject());
+    return BigDecimal.ZERO;
   }
 
   protected BigDecimal computePlannedTimeFromDisplayRestricted(
@@ -311,17 +296,10 @@ public class ProjectPlanningTimeServiceImpl implements ProjectPlanningTimeServic
         Optional.of(projectPlanningTime)
             .map(ProjectPlanningTime::getDisplayPlannedTimeRestricted)
             .map(PlannedTimeValue::getPlannedTime);
-    if (projectPlanningTime.getDisplayTimeUnit() == null
-        || projectPlanningTime.getTimeUnit() == null
-        || plannedTime.isEmpty()) {
+    if (projectPlanningTime.getTimeUnit() == null || plannedTime.isEmpty()) {
       return BigDecimal.ZERO;
     }
-    return unitConversionForProjectService.convert(
-        projectPlanningTime.getDisplayTimeUnit(),
-        projectPlanningTime.getTimeUnit(),
-        plannedTime.get(),
-        plannedTime.get().scale(),
-        projectPlanningTime.getProject());
+    return plannedTime.get();
   }
 
   @Override

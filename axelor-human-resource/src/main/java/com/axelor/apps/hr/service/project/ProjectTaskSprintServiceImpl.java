@@ -19,7 +19,6 @@
 package com.axelor.apps.hr.service.project;
 
 import com.axelor.apps.base.AxelorException;
-import com.axelor.apps.base.db.Unit;
 import com.axelor.apps.hr.db.Employee;
 import com.axelor.apps.project.db.Project;
 import com.axelor.apps.project.db.ProjectPlanningTime;
@@ -91,7 +90,7 @@ public class ProjectTaskSprintServiceImpl implements ProjectTaskSprintService {
         && projectTask.getBudgetedTime().compareTo(oldBudgetedTime) != 0) {
       projectPlanningTimeSet =
           projectPlanningTimeSet.stream()
-              .filter(ppt -> ppt.getDisplayPlannedTime().compareTo(oldBudgetedTime) == 0)
+              .filter(ppt -> ppt.getPlannedTime().compareTo(oldBudgetedTime) == 0)
               .collect(Collectors.toSet());
     }
 
@@ -203,14 +202,8 @@ public class ProjectTaskSprintServiceImpl implements ProjectTaskSprintService {
 
     projectPlanningTime.setStartDateTime(activeSprint.getFromDate().atStartOfDay());
     projectPlanningTime.setEndDateTime(activeSprint.getToDate().atTime(23, 59));
-    projectPlanningTime.setDisplayPlannedTime(projectTask.getBudgetedTime());
-    Unit timeUnit = projectPlanningTimeService.getTimeUnit(projectTask);
-    if (timeUnit != null) {
-      projectPlanningTime.setDisplayTimeUnit(timeUnit);
-    }
 
     projectPlanningTimeComputeService.computePlannedTimeValues(projectPlanningTime);
-    projectPlanningTime.setEndDateTime(activeSprint.getToDate().atTime(23, 59));
   }
 
   @Override

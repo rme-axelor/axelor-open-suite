@@ -20,7 +20,6 @@ package com.axelor.apps.hr.service.project;
 
 import com.axelor.apps.base.AxelorException;
 import com.axelor.apps.base.db.Company;
-import com.axelor.apps.base.db.Unit;
 import com.axelor.apps.base.db.WeeklyPlanning;
 import com.axelor.apps.base.service.app.AppBaseService;
 import com.axelor.apps.base.service.weeklyplanning.WeeklyPlanningService;
@@ -76,24 +75,13 @@ public class ProjectPlanningTimeComputeServiceImpl implements ProjectPlanningTim
       return;
     }
 
-    Unit timeUnit = projectPlanningTimeToolService.getDefaultTimeUnit(projectPlanningTime);
-    if (projectPlanningTime.getTimeUnit() == null) {
-      projectPlanningTime.setTimeUnit(timeUnit);
-    }
-    if (projectPlanningTime.getDisplayTimeUnit() == null) {
-      projectPlanningTime.setDisplayTimeUnit(timeUnit);
-    }
-
-    projectPlanningTime.setPlannedTime(
-        projectPlanningTimeService.computePlannedTime(projectPlanningTime));
-
     Project project = getProject(projectPlanningTime);
     Company company = Optional.ofNullable(project).map(Project::getCompany).orElse(null);
 
     if (company != null
         && projectConfigService.getProjectConfig(company).getIsSelectionOnDisplayPlannedTime()) {
       if (projectPlanningTime.getDisplayPlannedTimeRestricted() != null) {
-        projectPlanningTime.setDisplayPlannedTime(
+        projectPlanningTime.setPlannedTime(
             Optional.of(projectPlanningTime)
                 .map(ProjectPlanningTime::getDisplayPlannedTimeRestricted)
                 .map(PlannedTimeValue::getPlannedTime)
@@ -101,11 +89,8 @@ public class ProjectPlanningTimeComputeServiceImpl implements ProjectPlanningTim
       }
     } else {
       projectPlanningTime.setDisplayPlannedTimeRestricted(
-          plannedTimeValueService.createPlannedTimeValue(
-              projectPlanningTime.getDisplayPlannedTime()));
+          plannedTimeValueService.createPlannedTimeValue(projectPlanningTime.getPlannedTime()));
     }
-
-    projectPlanningTime.setEndDateTime(computeEndDateTime(projectPlanningTime, project));
   }
 
   protected Project getProject(ProjectPlanningTime projectPlanningTime) {
