@@ -184,7 +184,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 
     LOG.debug(
         "Get the tax for the product {} (company : {}, purchase : {}",
-        product.getCode(),
+        product != null ? product.getCode() : null,
         company.getName(),
         isPurchase);
 
@@ -197,7 +197,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
     throw new AxelorException(
         TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
         I18n.get(BaseExceptionMessage.ACCOUNT_MANAGEMENT_3),
-        product.getCode(),
+        product != null ? product.getCode() : null,
         company.getName());
   }
 
