@@ -51,8 +51,10 @@ public class SaleOrderBudgetRepository extends SaleOrderSupplychainRepository {
 
   @Override
   public SaleOrder save(SaleOrder saleOrder) {
+    saleOrder = super.save(saleOrder);
+
     if (!Beans.get(AppBudgetService.class).isApp("budget")) {
-      return super.save(saleOrder);
+      return saleOrder;
     }
 
     try {
@@ -63,8 +65,6 @@ public class SaleOrderBudgetRepository extends SaleOrderSupplychainRepository {
           saleOrderBudgetService.checkAmountForSaleOrderLine(saleOrderLine);
         }
       }
-
-      saleOrder = super.save(saleOrder);
 
       Beans.get(SaleOrderBudgetService.class).validateSaleAmountWithBudgetDistribution(saleOrder);
 
