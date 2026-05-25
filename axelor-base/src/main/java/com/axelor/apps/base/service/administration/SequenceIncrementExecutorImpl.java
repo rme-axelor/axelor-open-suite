@@ -43,7 +43,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
-import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +54,6 @@ import org.slf4j.LoggerFactory;
  * safety.
  */
 @Singleton
-@ThreadSafe
 public class SequenceIncrementExecutorImpl implements SequenceIncrementExecutor {
 
   private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

@@ -54,7 +54,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
-import javax.annotation.concurrent.ThreadSafe;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
@@ -70,7 +69,6 @@ import org.slf4j.LoggerFactory;
  * {@link SequenceComputationService} for number formatting.
  */
 @Singleton
-@ThreadSafe
 public class SequenceReservationServiceImpl implements SequenceReservationService {
 
   private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());

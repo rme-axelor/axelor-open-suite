@@ -48,12 +48,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.annotation.concurrent.ThreadSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ScriptAllowed
-@ThreadSafe
 @Singleton
 public class SequenceService {
 
